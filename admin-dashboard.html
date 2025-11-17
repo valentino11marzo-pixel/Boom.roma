@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOM - Admin Control</title>
+    
+    <meta name="description" content="Master admin dashboard">
+    <meta name="theme-color" content="#0A0A0A">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Bebas+Neue&family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        :root {
+            --boom-yellow: #FFD700;
+            --boom-cyan: #00CED1;
+            --boom-green: #00FF88;
+            --boom-red: #FF3B3B;
+            --boom-purple: #9D4EDD;
+            --boom-blue: #4A90E2;
+            --dark-bg: #0A0A0A;
+            --dark-surface: #1A1A1A;
+            --dark-elevated: #252525;
+            --dark-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #FFFFFF;
+            --text-secondary: #888888;
+            --font-display: 'Bebas Neue', sans-serif;
+            --font-heading: 'Oswald', sans-serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1), var(--dark-bg));
+        }
+
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-logo-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--boom-yellow);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+            animation: adminPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes adminPulse {
+            0%, 100% { 
+                box-shadow: 0 0 60px rgba(255, 215, 0, 0.8);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 80px rgba(255, 215, 0, 1);
+                transform: scale(1.05);
+            }
+        }
+
+        .login-logo-text {
+            font-family: var(--font-display);
+            font-size: 48px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, var(--boom-yellow), var(--boom-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--boom-yellow), var(--boom-cyan));
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--dark-bg);
+            margin-bottom: 20px;
+        }
+
+        .login-title {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 300;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            padding: 16px 20px;
+            background: var(--dark-elevated);
+            border: 1px solid var(--dark-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: var(--font-body);
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--boom-yellow);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+        }
+
+        .btn-login {
+            padding: 18px;
+            background: linear-gradient(135deg, var(--boom-yellow), var(--boom-cyan));
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(255, 215, 0, 0.8);
+        }
+
+        .error-message {
+            padding: 12px 16px;
+            background: rgba(255, 59, 59, 0.1);
+            border: 1px solid var(--boom-red);
+            border-radius: 10px;
+            color: var(--boom-red);
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: none;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        .dashboard-container.active {
+            display: grid;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--dark-surface);
+            border-right: 1px solid var(--dark-border);
+            padding: 30px 20px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .logo-container:hover {
+            opacity: 0.8;
+        }
+
+        .logo-circle {
+            width: 40px;
+            height: 40px;
+            background: var(--boom-yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+
+        .admin-sidebar-badge {
+            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(0, 206, 209, 0.15));
+            border: 1px solid var(--boom-yellow);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .admin-label {
+            font-size: 11px;
+            color: var(--boom-yellow);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .admin-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 14px 16px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: var(--dark-elevated);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--dark-elevated);
+            border-color: var(--boom-yellow);
+            color: var(--text-primary);
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid var(--dark-border);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-logout:hover {
+            border-color: var(--boom-red);
+            color: var(--boom-red);
+            background: rgba(255, 59, 59, 0.05);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px;
+            max-width: 1600px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: 56px;
+            font-weight: 300;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--boom-yellow), var(--boom-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 30px;
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--boom-yellow), var(--boom-cyan));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--boom-yellow);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--boom-yellow), var(--boom-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+        }
+
+        /* Owners Grid */
+        .owners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .owner-card {
+            padding: 24px;
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .owner-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--boom-purple);
+            box-shadow: 0 10px 40px rgba(157, 78, 221, 0.2);
+        }
+
+        .owner-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .owner-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--boom-purple), var(--boom-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .owner-info {
+            flex: 1;
+        }
+
+        .owner-name-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .owner-properties-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .owner-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .owner-stat {
+            text-align: center;
+            padding: 12px;
+            background: var(--dark-elevated);
+            border-radius: 10px;
+        }
+
+        .owner-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--boom-yellow);
+            margin-bottom: 4px;
+        }
+
+        .owner-stat-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-view-owner {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--dark-border);
+            color: var(--text-primary);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-view-owner:hover {
+            border-color: var(--boom-cyan);
+            background: rgba(0, 206, 209, 0.1);
+        }
+
+        /* Properties Table */
+        .properties-table {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr 150px;
+            padding: 20px 24px;
+            background: var(--dark-elevated);
+            border-bottom: 1px solid var(--dark-border);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr 150px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--dark-border);
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .table-row:hover {
+            background: var(--dark-elevated);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .property-name-cell {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .owner-cell {
+            color: var(--boom-purple);
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-available {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--boom-green);
+            border: 1px solid var(--boom-green);
+        }
+
+        .status-rented {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--boom-yellow);
+            border: 1px solid var(--boom-yellow);
+        }
+
+        .status-maintenance {
+            background: rgba(255, 59, 59, 0.1);
+            color: var(--boom-red);
+            border: 1px solid var(--boom-red);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-table-action {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--dark-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-table-action:hover {
+            border-color: var(--boom-cyan);
+            background: rgba(0, 206, 209, 0.1);
+        }
+
+        .btn-table-action.danger:hover {
+            border-color: var(--boom-red);
+            background: rgba(255, 59, 59, 0.1);
+            color: var(--boom-red);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            padding: 16px 24px;
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 100px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: var(--font-body);
+            width: 400px;
+            transition: all 0.3s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--boom-yellow);
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+        }
+
+        /* Section */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 80px 40px;
+            background: var(--dark-surface);
+            border: 1px dashed var(--dark-border);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .empty-text {
+            color: var(--text-secondary);
+        }
+
+        /* Action Button */
+        .btn-action {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--boom-yellow), var(--boom-cyan));
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 36px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .owners-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header, .table-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="login-logo-circle"></div>
+                <div class="login-logo-text">BOOM</div>
+            </div>
+
+            <div style="text-align: center;">
+                <span class="admin-badge">👑 Admin Access</span>
+            </div>
+
+            <h1 class="login-title">Master Control</h1>
+            <p class="login-subtitle">Admin dashboard for BOOM platform</p>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Admin Password</label>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="adminPassword"
+                        required
+                        placeholder="Enter master password"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <button type="submit" class="btn-login">
+                    👑 Access Admin Panel
+                </button>
+            </form>
+
+            <div class="login-help" style="margin-top: 30px; text-align: center; font-size: 13px; color: var(--text-secondary);">
+                Authorized personnel only
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container" id="dashboardContainer">
+        <aside class="sidebar">
+            <div class="logo-container" onclick="window.location.href='/'">
+                <div class="logo-circle"></div>
+                <div class="logo-text">BOOM</div>
+            </div>
+
+            <div class="admin-sidebar-badge">
+                <div class="admin-label">👑 Admin</div>
+                <div class="admin-name">Valentino</div>
+            </div>
+
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="switchSection('overview')">
+                    📊 Overview
+                </div>
+                <div class="nav-item" onclick="switchSection('owners')">
+                    👥 All Owners
+                </div>
+                <div class="nav-item" onclick="switchSection('properties')">
+                    🏠 All Properties
+                </div>
+                <div class="nav-item" onclick="switchSection('analytics')">
+                    📈 Analytics
+                </div>
+                <div class="nav-item" onclick="switchSection('settings')">
+                    ⚙️ Settings
+                </div>
+            </nav>
+
+            <button class="btn-logout" onclick="handleLogout()">
+                🚪 Logout
+            </button>
+        </aside>
+
+        <main class="main-content">
+            <!-- Overview Section -->
+            <div class="section active" id="overviewSection">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Master Control</h1>
+                        <p class="page-subtitle">Complete platform overview</p>
+                    </div>
+                    <button class="btn-action" onclick="refreshData()">
+                        🔄 Refresh Data
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Owners</div>
+                        <div class="stat-value" id="statTotalOwners">0</div>
+                        <div class="stat-change">
+                            Platform users
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Total Properties</div>
+                        <div class="stat-value" id="statTotalProperties">0</div>
+                        <div class="stat-change">
+                            All listings
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Currently Rented</div>
+                        <div class="stat-value" id="statRented">0</div>
+                        <div class="stat-change">
+                            Active contracts
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-value" id="statRevenue">€0</div>
+                        <div class="stat-change">
+                            Monthly income
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 20px; margin-top: 40px;">
+                    Recent Activity
+                </h2>
+
+                <div id="recentActivity"></div>
+            </div>
+
+            <!-- Owners Section -->
+            <div class="section" id="ownersSection">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">All Owners</h1>
+                        <p class="page-subtitle">Complete owner directory</p>
+                    </div>
+                    <input 
+                        type="text" 
+                        class="search-bar" 
+                        placeholder="🔍 Search owners..."
+                        oninput="searchOwners(this.value)"
+                    >
+                </div>
+
+                <div class="owners-grid" id="ownersGrid"></div>
+            </div>
+
+            <!-- Properties Section -->
+            <div class="section" id="propertiesSection">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">All Properties</h1>
+                        <p class="page-subtitle">Complete property database</p>
+                    </div>
+                    <input 
+                        type="text" 
+                        class="search-bar" 
+                        placeholder="🔍 Search properties..."
+                        oninput="searchProperties(this.value)"
+                    >
+                </div>
+
+                <div class="properties-table" id="propertiesTable"></div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="section" id="analyticsSection">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Analytics</h1>
+                        <p class="page-subtitle">Platform performance metrics</p>
+                    </div>
+                </div>
+
+                <div class="empty-state">
+                    <div class="empty-icon">📈</div>
+                    <div class="empty-title">Advanced Analytics</div>
+                    <div class="empty-text">
+                        Detailed performance metrics and insights<br>
+                        coming in the next update!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="section" id="settingsSection">
+                <div class="page-header">
+                    <div>
+                        <h1 class="page-title">Settings</h1>
+                        <p class="page-subtitle">Platform configuration</p>
+                    </div>
+                </div>
+
+                <div style="background: var(--dark-surface); border: 1px solid var(--dark-border); border-radius: 20px; padding: 30px;">
+                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 20px;">
+                        🔧 Admin Tools
+                    </h3>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="btn-action" onclick="exportAllData()">
+                            💾 Export All Data
+                        </button>
+                        <button class="btn-action" onclick="clearAllData()" style="background: linear-gradient(135deg, var(--boom-red), #FF6B6B);">
+                            🗑️ Clear All Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ========================================
+        // 👑 BOOM ADMIN DASHBOARD V1.0
+        // Master Control System
+        // ========================================
+
+        const ADMIN_PASSWORD = 'BOOM2025!'; // Change this!
+
+        let adminSession = null;
+        let allData = {
+            owners: [],
+            properties: [],
+            documents: []
+        };
+
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedSession = sessionStorage.getItem('boomAdminSession');
+            if (savedSession) {
+                try {
+                    adminSession = JSON.parse(savedSession);
+                    showDashboard();
+                } catch (e) {
+                    console.error('Invalid admin session');
+                }
+            }
+        });
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('adminPassword').value;
+
+            if (password !== ADMIN_PASSWORD) {
+                showError('❌ Invalid admin password');
+                return;
+            }
+
+            adminSession = {
+                role: 'admin',
+                loginTime: new Date().toISOString()
+            };
+
+            sessionStorage.setItem('boomAdminSession', JSON.stringify(adminSession));
+            
+            showDashboard();
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem('boomAdminSession');
+                adminSession = null;
+                location.reload();
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboardContainer').classList.add('active');
+            
+            loadAllData();
+        }
+
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            setTimeout(() => errorEl.classList.remove('show'), 5000);
+        }
+
+        // ========================================
+        // DATA LOADING - Scan ALL localStorage
+        // ========================================
+
+        function loadAllData() {
+            allData = {
+                owners: [],
+                properties: [],
+                documents: []
+            };
+
+            // Scan all localStorage keys
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                // Find owner data (boom_USERKEY_properties)
+                if (key.startsWith('boom_') && key.includes('_properties')) {
+                    try {
+                        const properties = JSON.parse(localStorage.getItem(key));
+                        const ownerKey = key.split('_')[1];
+                        
+                        // Try to extract owner name from first property or use key
+                        const ownerName = properties.length > 0 ? 
+                            `Owner ${allData.owners.length + 1}` : 
+                            `Owner ${allData.owners.length + 1}`;
+
+                        allData.owners.push({
+                            key: ownerKey,
+                            name: ownerName,
+                            properties: properties,
+                            propertyCount: properties.length,
+                            rentedCount: properties.filter(p => p.status === 'rented').length,
+                            totalRevenue: properties
+                                .filter(p => p.status === 'rented')
+                                .reduce((sum, p) => sum + (p.rent || 0), 0)
+                        });
+
+                        // Add properties to global list
+                        properties.forEach(property => {
+                            allData.properties.push({
+                                ...property,
+                                ownerKey: ownerKey,
+                                ownerName: ownerName
+                            });
+                        });
+                    } catch (e) {
+                        console.error('Error loading owner data:', e);
+                    }
+                }
+
+                // Find documents
+                if (key.startsWith('boom_') && key.includes('_documents')) {
+                    try {
+                        const documents = JSON.parse(localStorage.getItem(key));
+                        allData.documents.push(...documents);
+                    } catch (e) {
+                        console.error('Error loading documents:', e);
+                    }
+                }
+            }
+
+            updateDashboard();
+        }
+
+        function refreshData() {
+            loadAllData();
+            alert('✅ Data refreshed!');
+        }
+
+        // ========================================
+        // DASHBOARD UPDATES
+        // ========================================
+
+        function updateDashboard() {
+            // Update stats
+            document.getElementById('statTotalOwners').textContent = allData.owners.length;
+            document.getElementById('statTotalProperties').textContent = allData.properties.length;
+            
+            const rentedCount = allData.properties.filter(p => p.status === 'rented').length;
+            document.getElementById('statRented').textContent = rentedCount;
+            
+            const totalRevenue = allData.properties
+                .filter(p => p.status === 'rented')
+                .reduce((sum, p) => sum + (p.rent || 0), 0);
+            document.getElementById('statRevenue').textContent = `€${totalRevenue.toLocaleString()}`;
+
+            // Update recent activity
+            updateRecentActivity();
+            
+            // Update owners grid
+            updateOwnersGrid();
+            
+            // Update properties table
+            updatePropertiesTable();
+        }
+
+        function updateRecentActivity() {
+            const container = document.getElementById('recentActivity');
+            
+            if (allData.properties.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div class="empty-title">No Activity Yet</div>
+                        <div class="empty-text">
+                            Activity will appear as owners add properties
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Show recent properties
+            const recentProperties = [...allData.properties]
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 5);
+
+            container.innerHTML = `
+                <div class="properties-table">
+                    <div class="table-header">
+                        <div>Property</div>
+                        <div>Owner</div>
+                        <div>Status</div>
+                        <div>Rent</div>
+                        <div>Date</div>
+                        <div></div>
+                        <div>Actions</div>
+                    </div>
+                    ${recentProperties.map(property => createTableRow(property)).join('')}
+                </div>
+            `;
+        }
+
+        function updateOwnersGrid() {
+            const container = document.getElementById('ownersGrid');
+
+            if (allData.owners.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <div class="empty-title">No Owners Yet</div>
+                        <div class="empty-text">
+                            Owners will appear as they register
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = allData.owners.map((owner, index) => `
+                <div class="owner-card">
+                    <div class="owner-header">
+                        <div class="owner-avatar">${owner.name.charAt(0).toUpperCase()}</div>
+                        <div class="owner-info">
+                            <div class="owner-name-text">${owner.name}</div>
+                            <div class="owner-properties-count">${owner.propertyCount} properties</div>
+                        </div>
+                    </div>
+                    <div class="owner-stats">
+                        <div class="owner-stat">
+                            <div class="owner-stat-value">${owner.propertyCount}</div>
+                            <div class="owner-stat-label">Properties</div>
+                        </div>
+                        <div class="owner-stat">
+                            <div class="owner-stat-value">${owner.rentedCount}</div>
+                            <div class="owner-stat-label">Rented</div>
+                        </div>
+                        <div class="owner-stat">
+                            <div class="owner-stat-value">€${owner.totalRevenue}</div>
+                            <div class="owner-stat-label">Revenue</div>
+                        </div>
+                    </div>
+                    <button class="btn-view-owner" onclick="viewOwnerDetails('${owner.key}')">
+                        View Details
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function updatePropertiesTable() {
+            const container = document.getElementById('propertiesTable');
+
+            if (allData.properties.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🏠</div>
+                        <div class="empty-title">No Properties Yet</div>
+                        <div class="empty-text">
+                            Properties will appear as owners add them
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="table-header">
+                    <div>Property</div>
+                    <div>Owner</div>
+                    <div>Status</div>
+                    <div>Rent</div>
+                    <div>Bedrooms</div>
+                    <div>Area</div>
+                    <div>Actions</div>
+                </div>
+                ${allData.properties.map(property => createTableRow(property)).join('')}
+            `;
+        }
+
+        function createTableRow(property) {
+            const statusClass = `status-${property.status}`;
+            const statusLabel = property.status.charAt(0).toUpperCase() + property.status.slice(1);
+            const photosCount = property.photos ? property.photos.length : 0;
+
+            return `
+                <div class="table-row">
+                    <div class="property-name-cell">
+                        ${property.name}
+                        ${photosCount > 0 ? `<div style="font-size: 11px; color: var(--boom-cyan); margin-top: 4px;">📸 ${photosCount} photos</div>` : ''}
+                    </div>
+                    <div class="owner-cell">${property.ownerName}</div>
+                    <div><span class="status-badge ${statusClass}">${statusLabel}</span></div>
+                    <div>€${property.rent || 0}</div>
+                    <div>${property.bedrooms || 0}</div>
+                    <div>${property.sqm || 0}m²</div>
+                    <div class="table-actions">
+                        <button class="btn-table-action" onclick="viewPropertyAdminDetailed('${property.id}', '${property.ownerKey}')">
+                            View
+                        </button>
+                        ${photosCount > 0 ? `<button class="btn-table-action" onclick="viewPropertyPhotos('${property.id}', '${property.ownerKey}')">Photos</button>` : ''}
+                        <button class="btn-table-action danger" onclick="deletePropertyAdmin('${property.id}', '${property.ownerKey}')">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========================================
+        // ACTIONS
+        // ========================================
+
+        function viewOwnerDetails(ownerKey) {
+            const owner = allData.owners.find(o => o.key === ownerKey);
+            if (!owner) return;
+
+            alert(`
+Owner Details:
+━━━━━━━━━━━━━━━━━━
+👤 ${owner.name}
+🏠 ${owner.propertyCount} properties
+✅ ${owner.rentedCount} currently rented
+💰 €${owner.totalRevenue}/month revenue
+🔑 Key: ${ownerKey}
+            `);
+        }
+
+        function viewPropertyAdmin(propertyId, ownerKey) {
+            const property = allData.properties.find(p => p.id === propertyId && p.ownerKey === ownerKey);
+            if (!property) return;
+
+            alert(`
+Property Details:
+━━━━━━━━━━━━━━━━━━
+📍 ${property.name}
+🏠 ${property.address}
+👤 Owner: ${property.ownerName}
+💰 €${property.rent}/month
+🛏️  ${property.bedrooms} bedrooms
+📐 ${property.sqm}m²
+📊 Status: ${property.status}
+            `);
+        }
+
+        function deletePropertyAdmin(propertyId, ownerKey) {
+            if (!confirm('⚠️ Delete this property?\n\nThis will remove it from the owner\'s account!')) return;
+
+            // Find the owner's storage key
+            const storageKey = `boom_${ownerKey}_properties`;
+            let properties = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            
+            // Remove property
+            properties = properties.filter(p => p.id !== propertyId);
+            
+            // Save back
+            localStorage.setItem(storageKey, JSON.stringify(properties));
+
+            alert('✅ Property deleted!');
+            loadAllData();
+        }
+
+        function searchOwners(query) {
+            // Filter and update display
+            const filtered = allData.owners.filter(owner => 
+                owner.name.toLowerCase().includes(query.toLowerCase())
+            );
+
+            const container = document.getElementById('ownersGrid');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No results</div></div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(owner => `
+                <div class="owner-card">
+                    <div class="owner-header">
+                        <div class="owner-avatar">${owner.name.charAt(0).toUpperCase()}</div>
+                        <div class="owner-info">
+                            <div class="owner-name-text">${owner.name}</div>
+                            <div class="owner-properties-count">${owner.propertyCount} properties</div>
+                        </div>
+                    </div>
+                    <div class="owner-stats">
+                        <div class="owner-stat">
+                            <div class="owner-stat-value">${owner.propertyCount}</div>
+                            <div class="owner-stat-label">Properties</div>
+                        </div>
+                        <div class="owner-stat">
+                            <div class="owner-stat-value">${owner.rentedCount}</div>
+                            <div class="owner-stat-label">Rented</div>
+                        </div>
+                        <div class="owner-stat">
+                            <div class="owner-stat-value">€${owner.totalRevenue}</div>
+                            <div class="owner-stat-label">Revenue</div>
+                        </div>
+                    </div>
+                    <button class="btn-view-owner" onclick="viewOwnerDetails('${owner.key}')">
+                        View Details
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function searchProperties(query) {
+            const filtered = allData.properties.filter(property => 
+                property.name.toLowerCase().includes(query.toLowerCase()) ||
+                property.address.toLowerCase().includes(query.toLowerCase()) ||
+                property.ownerName.toLowerCase().includes(query.toLowerCase())
+            );
+
+            const container = document.getElementById('propertiesTable');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><div class="empty-title">No results</div></div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="table-header">
+                    <div>Property</div>
+                    <div>Owner</div>
+                    <div>Status</div>
+                    <div>Rent</div>
+                    <div>Bedrooms</div>
+                    <div>Area</div>
+                    <div>Actions</div>
+                </div>
+                ${filtered.map(property => createTableRow(property)).join('')}
+            `;
+        }
+
+        function exportAllData() {
+            const dataStr = JSON.stringify(allData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `boom-data-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            alert('✅ Data exported!');
+        }
+
+        function clearAllData() {
+            if (!confirm('⚠️ WARNING!\n\nThis will DELETE ALL DATA from ALL OWNERS!\n\nAre you absolutely sure?')) return;
+            if (!confirm('Last chance! This cannot be undone.\n\nDelete everything?')) return;
+
+            // Clear all boom-related localStorage
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+                const key = localStorage.key(i);
+                if (key.startsWith('boom_')) {
+                    localStorage.removeItem(key);
+                }
+            }
+
+            alert('✅ All data cleared!');
+            loadAllData();
+        }
+
+        // ========================================
+        // NAVIGATION
+        // ========================================
+
+        function switchSection(sectionName) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionName + 'Section').classList.add('active');
+        }
+
+        function viewPropertyAdminDetailed(propertyId, ownerKey) {
+            const property = allData.properties.find(p => p.id === propertyId && p.ownerKey === ownerKey);
+            if (!property) return;
+
+            const photosCount = property.photos ? property.photos.length : 0;
+            const description = property.description || 'No description';
+
+            alert(`
+Property Full Details:
+━━━━━━━━━━━━━━━━━━
+📍 ${property.name}
+🏠 ${property.address}
+👤 Owner: ${property.ownerName}
+
+💰 Rent: €${property.rent}/month
+🛏️  Bedrooms: ${property.bedrooms}
+🚿 Bathrooms: ${property.bathrooms || 0}
+📐 Area: ${property.sqm}m²
+📊 Status: ${property.status}
+
+📸 Photos: ${photosCount}
+📝 ${description}
+
+Created: ${new Date(property.createdAt).toLocaleDateString()}
+            `);
+        }
+
+        function viewPropertyPhotos(propertyId, ownerKey) {
+            const property = allData.properties.find(p => p.id === propertyId && p.ownerKey === ownerKey);
+            if (!property || !property.photos || property.photos.length === 0) {
+                alert('No photos available');
+                return;
+            }
+
+            // Open new window with photo gallery
+            const newWindow = window.open('', '_blank', 'width=1200,height=800');
+            newWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Photos - ${property.name}</title>
+                    <style>
+                        * { margin: 0; padding: 0; box-sizing: border-box; }
+                        body { 
+                            background: #0A0A0A; 
+                            color: #FFF;
+                            font-family: -apple-system, sans-serif;
+                            padding: 40px;
+                        }
+                        h1 {
+                            font-size: 32px;
+                            margin-bottom: 10px;
+                            font-weight: 300;
+                            text-transform: uppercase;
+                            letter-spacing: 2px;
+                        }
+                        .subtitle {
+                            color: #888;
+                            margin-bottom: 40px;
+                        }
+                        .gallery {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                            gap: 20px;
+                        }
+                        .photo {
+                            aspect-ratio: 4/3;
+                            border-radius: 16px;
+                            overflow: hidden;
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        }
+                        .photo:hover {
+                            transform: translateY(-4px);
+                            box-shadow: 0 10px 40px rgba(157, 78, 221, 0.3);
+                        }
+                        .photo img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+                        .modal {
+                            display: none;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: rgba(0, 0, 0, 0.95);
+                            align-items: center;
+                            justify-content: center;
+                            padding: 40px;
+                            z-index: 1000;
+                        }
+                        .modal.active {
+                            display: flex;
+                        }
+                        .modal img {
+                            max-width: 100%;
+                            max-height: 90vh;
+                            border-radius: 12px;
+                        }
+                        .close-btn {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            width: 50px;
+                            height: 50px;
+                            background: rgba(255, 255, 255, 0.1);
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            border-radius: 50%;
+                            color: white;
+                            font-size: 24px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>📸 ${property.name}</h1>
+                    <div class="subtitle">${property.photos.length} Photos • ${property.address}</div>
+                    
+                    <div class="gallery">
+                        ${property.photos.map((photo, index) => `
+                            <div class="photo" onclick="openPhoto(${index})">
+                                <img src="${photo.data}" alt="Photo ${index + 1}">
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="modal" id="modal" onclick="closeModal()">
+                        <button class="close-btn">×</button>
+                        <img id="modalImage" src="">
+                    </div>
+
+                    <script>
+                        const photos = ${JSON.stringify(property.photos)};
+                        
+                        function openPhoto(index) {
+                            document.getElementById('modalImage').src = photos[index].data;
+                            document.getElementById('modal').classList.add('active');
+                        }
+
+                        function closeModal() {
+                            document.getElementById('modal').classList.remove('active');
+                        }
+
+                        document.addEventListener('keydown', (e) => {
+                            if (e.key === 'Escape') closeModal();
+                        });
+                    <\/script>
+                </body>
+                </html>
+            `);
+        }
+
+        // Update loadAllData to also load documents
+        function loadAllData() {
+            allData = {
+                owners: [],
+                properties: [],
+                documents: []
+            };
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                
+                if (key.startsWith('boom_') && key.includes('_properties')) {
+                    try {
+                        const properties = JSON.parse(localStorage.getItem(key));
+                        const ownerKey = key.split('_')[1];
+                        
+                        const ownerName = properties.length > 0 ? 
+                            `Owner ${allData.owners.length + 1}` : 
+                            `Owner ${allData.owners.length + 1}`;
+
+                        allData.owners.push({
+                            key: ownerKey,
+                            name: ownerName,
+                            properties: properties,
+                            propertyCount: properties.length,
+                            rentedCount: properties.filter(p => p.status === 'rented').length,
+                            totalRevenue: properties
+                                .filter(p => p.status === 'rented')
+                                .reduce((sum, p) => sum + (p.rent || 0), 0)
+                        });
+
+                        properties.forEach(property => {
+                            allData.properties.push({
+                                ...property,
+                                ownerKey: ownerKey,
+                                ownerName: ownerName
+                            });
+                        });
+                    } catch (e) {
+                        console.error('Error loading owner data:', e);
+                    }
+                }
+
+                if (key.startsWith('boom_') && key.includes('_documents')) {
+                    try {
+                        const documents = JSON.parse(localStorage.getItem(key));
+                        const ownerKey = key.split('_')[1];
+                        documents.forEach(doc => {
+                            allData.documents.push({
+                                ...doc,
+                                ownerKey: ownerKey
+                            });
+                        });
+                    } catch (e) {
+                        console.error('Error loading documents:', e);
+                    }
+                }
+            }
+
+            updateDashboard();
+        }
+
+        console.log('👑 BOOM Admin Dashboard V1.0');
+        console.log('✅ Master Control Active');
+        console.log('🔐 Admin Access Enabled');
+    </script>
+</body>
+</html>
